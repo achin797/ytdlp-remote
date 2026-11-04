@@ -55,7 +55,7 @@ jobs:
         run: |
           mkdir -p out
           yt-dlp --cookies cookies.txt \
-            -o "out/%(title).150B [%(id)s].%(ext)s" \
+            -o "out/%(title).150B - %(id)s.%(ext)s" \
             $ARGS "$URL"
 
       - name: Remove cookies
