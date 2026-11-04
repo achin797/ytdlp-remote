@@ -10,5 +10,5 @@ gh workflow run main.yml --repo "$REPO" -f url="$URL" -f args="$ARGS"
 sleep 5
 RUN_ID="$(gh run list --repo "$REPO" --workflow main.yml --limit 1 --json databaseId --jq '.[0].databaseId')"
 gh run watch "$RUN_ID" --repo "$REPO" --exit-status
-gh run download "$RUN_ID" --repo "$REPO" -n download -D downloads
+gh release download "dl-$RUN_ID" --repo "$REPO" -D downloads
 echo "Saved to ./downloads"
