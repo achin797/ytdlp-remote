@@ -21,9 +21,14 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
+
+      # yt-dlp needs a JS runtime to solve YouTube's challenges
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
 
       - name: Install yt-dlp + PO token plugin + ffmpeg
         run: |
