@@ -34,7 +34,12 @@ jobs:
           YT_COOKIES: ${{ secrets.YT_COOKIES }}
         run: |
           if [ -z "$YT_COOKIES" ]; then echo "YT_COOKIES secret missing"; exit 1; fi
-          echo "$YT_COOKIES" | base64 -d > cookies.txt
+          # Accept raw cookies.txt text (pasted) or base64
+          if printf '%s' "$YT_COOKIES" | grep -q $'\t'; then
+            printf '%s\n' "$YT_COOKIES" > cookies.txt
+          else
+            printf '%s' "$YT_COOKIES" | base64 -d > cookies.txt
+          fi
 
       - name: Download
         env:
