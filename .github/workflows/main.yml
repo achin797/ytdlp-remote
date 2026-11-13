@@ -56,9 +56,12 @@ jobs:
           ARGS: ${{ inputs.args }}
         run: |
           mkdir -p out
+          # Parse ARGS like a shell would, so quoted values (e.g. --download-sections "*00:01-00:02") work
+          mapfile -d '' -t EXTRA < <(python3 -c 'import os,shlex,sys; [sys.stdout.write(a+"\0") for a in shlex.split(os.environ["ARGS"])]')
           yt-dlp --cookies cookies.txt \
             -o "out/%(title).150B - %(id)s.%(ext)s" \
-            $ARGS "$URL"
+            "${EXTRA[@]}" "$URL"
+          if [ -z "$(ls -A out)" ]; then echo "::error::yt-dlp produced no files"; exit 1; fi
 
       - name: Remove cookies
         if: always()
